@@ -4,3 +4,4 @@ FILE *leer_archivo(char *string);
 
 int string_to_int(char *string);
 //chupala123...o
+//diego ql 
