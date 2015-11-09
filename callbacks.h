@@ -1,7 +1,7 @@
-void callback4(char *string);
+void Mostrar_por_linea(char *string);
 	
-void callback5(char *string);
+void Crear_archivo(char *string);
 
-void callback6(char *string);
+void Eliminar_archivo(char *string);
 
-void callback7(char *string);
+void Truncar_archivo(char *string);

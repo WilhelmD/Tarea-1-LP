@@ -71,7 +71,7 @@ int string_to_int(char *string){
 	return suma;
 }
 
-void callback4(char *string){
+void Mostrar_por_linea(char *string){
 	int linea;
 	FILE *input,*archivo;
 
@@ -120,7 +120,7 @@ void callback4(char *string){
 	fclose(input);
 }
 	
-void callback5(char *string){//leer archivo de input y crear un archivo por cada linea.
+void Crear_archivo(char *string){//leer archivo de input y crear un archivo por cada linea.
 	/*size_t *n,valor,largo;
 	const char *filename;
 	char **arreglo;*/
@@ -154,7 +154,7 @@ void callback5(char *string){//leer archivo de input y crear un archivo por cada
 	fclose(input);
 }
 
-void callback6(char *string){//string es el input completo: <token> ... <token> <nombre archivo>
+void Eliminar_archivo(char *string){//string es el input completo: <token> ... <token> <nombre archivo>
 	/*size_t *n,valor,largo;
 	const char *filename;
 	char **arreglo;*/
@@ -186,7 +186,7 @@ void callback6(char *string){//string es el input completo: <token> ... <token> 
 	fclose(input);
 }
 
-void callback7(char *string){
+void Truncar_archivo(char *string){
 	/*size_t *n,valor,largo;
 	const char *filename;
 	char **arreglo;*/
