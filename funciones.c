@@ -70,6 +70,13 @@ int string_to_int(char *string){
 	return suma;
 }
 
+void Terminar_programa(char *string){
+  //recibir string leer archivo imprimir texto.
+  //liberar memoria almacenada en el arbol.
+  //
+
+}
+
 void Mostrar_por_linea(char *string){
 	int linea;
 	FILE *input,*archivo;
