@@ -1,7 +1,7 @@
 all: main
 
-dfa: main.o funciones.o
-	gcc -o dfa main.o funciones.o
+main: main.o funciones.o
+	gcc -o main main.o funciones.o
 
 main.o: main.c funciones.h
 	gcc -c main.c
