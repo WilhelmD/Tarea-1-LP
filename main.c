@@ -4,17 +4,30 @@
 
 int main(){
 	int n_comandos;
+	char **a;
 	printf("");
+	
 	scanf("%d",&n_comandos);
-	char string[MAX_BUFFER];
-	char *ptrstring;
-	ptrstring=string;
-	for(int i=0;i<n_comandos;i++){
-		printf(">> ");
-		scanf("%s", ptrstring);
-		getchar();
-		puts(ptrstring);
-	}
+	getchar();
 
+	char *string = NULL;
+	char delimitador=' ';
+	size_t largo;
+	ssize_t lenstr = 0;
+	size_t n_palabras;
+	
+	for(int i=0; i<n_comandos; i++){
+		printf(">>");
+		getline(&string, &largo, stdin);
+		printf("%s",string);
+		a=split(string,largo,delimitador,&n_palabras);
+		printf("%c",a[0][0]);	
+	
+
+	}
+	
+
+	
 	return 0;
 }
+
