@@ -1,4 +1,4 @@
-#include "funciones.c"
+#include "funciones.h"
 #include "nodes.h"
 #define MAX_BUFFER 1000
 
@@ -21,11 +21,11 @@ int main(){
 		getline(&string, &largo, stdin);
 		//printf("%s",string);
 		a=split(string,largo,delimitador,&n_palabras);
-		for(int i=0;i<n_palabras;i++){
-			for(int j=0;j<n_palabras;j++){
-				printf("%c",a[i][j]);
-			}
-		}
+		//for(int i=0;i<n_palabras;i++){
+		//	for(int j=0;j<n_palabras;j++){
+		//		printf("%c",a[i][j]);
+		//	}
+		//}
 
 
 
