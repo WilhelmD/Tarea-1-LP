@@ -8,7 +8,7 @@ typedef struct l_node ListaNodo;
 typedef struct t_node ArbolNodo;
 
 
-struct t_node {	
+struct t_node {
 	ListaNodo *children;
 	char *word;
 	void (*callback)(const char *);
@@ -16,8 +16,10 @@ struct t_node {
 
 struct l_node{
 	ArbolNodo *data;
-	ListaNodo *siguiente;	
+	ListaNodo *siguiente;
 };
 
+void insertar_nodo(ArbolNodo arbol, char **palabras, size_t largo_array);
+void insertar_lista(ListaNodo *ptrCabecera,char *palabra);
 
 #endif // NODES_H
