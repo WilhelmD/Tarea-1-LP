@@ -1,5 +1,12 @@
 #include "funciones.h"
-#include <math.h>
+
+int power(int base,int potencia){
+	int i,resultado = 1;
+	for (i=0;i<potencia;i++){
+		resultado *= base;
+	}
+	return resultado;
+}
 
 char **split(char *phrase, const size_t length, const char delimiter, size_t *n_tokens)
 {
@@ -39,49 +46,76 @@ char *linea_archivo(FILE *archivo){ //entrega un string con la linea de un archi
 	return linea;
 }
 
-FILE *leer_archivo(char *string){
-	size_t *n,valor,largo;
-	const char *filename;
-	char **arreglo;
-	FILE *archivo;
+char *nombre_archivo(char *string){ //lee el archivo con nombre en el ultimo token
+	int i,largo_nombre;	
+	size_t valor,*n,largo;
+	char *filename;
+	char **tokens;
 
 	valor = 0;
 	n = &valor;
-	largo = strlen((const char*) string);
-	arreglo = split(string,largo,' ',n);
-	filename = arreglo[((int) *n )-1];
-	archivo = fopen(filename,"r");
-	free(arreglo);
-	return archivo;
+	largo = strlen(string);
+	tokens = split(string,largo,' ',n);
+
+	largo = strlen(tokens[(int) *n -1]);
+	largo_nombre = (int) largo;
+	filename = malloc(sizeof(char) * largo_nombre);
+	for (i = 0;i<largo_nombre;i++) filename[i] = tokens[(int) *n -1][i];
+
+	return filename;
 }
 
-int string_to_int(char *string){
-	int suma,valor;
+int string_to_int(char *string){ // convierte un string a entero, asumiendo que el entero va desde -X a +Y.
+	int i,suma,valor;
 	size_t largo;
 
 	largo = (int) strlen(string);
 	suma = 0;
 
-	for (int i=0;i<largo;i++){
+	for (i=0;i<largo;i++){
 		valor = (int) string[i] - '0';
-		valor *= pow(10,largo-1-i);
+		valor *= power(10,largo-1-i);
 		suma += valor;
 	}
 	return suma;
 }
 
-void Terminar_programa(char *string){
-  //recibir string leer archivo imprimir texto.
-  //liberar memoria almacenada en el arbol.
-  //
+void Terminar_programa(char *string){ //leer archivo, imprimir texto.
+	char *nombre,noargs[] = "noargs";
+	nombre = nombre_archivo(string);
 
+	if (strcmp(nombre,noargs) != 0){
+		FILE *input;
+		input = fopen(nombre,"r");
+
+		if (input == NULL){
+			printf("Archivo %s no existe\n",nombre);
+			free(nombre);
+			exit(0);
+		}
+
+		char *texto;
+
+		texto = linea_archivo(input);
+		printf("%s",texto);//asumiendo que el archivo tiene 1 sola linea.
+
+		fclose(input);
+		free(texto);
+	}
+	free(nombre);
+
+  //liberar memoria almacenada en el arbol.
+
+	exit(0);
 }
 
-void Mostrar_por_linea(char *string){
+void Mostrar_por_linea(char *string){//caso en que linea no existe.
 	int linea;
+	char *nombre;
 	FILE *input,*archivo;
 
-	input = leer_archivo(string);
+	nombre = nombre_archivo(string);
+	input = fopen(nombre,"r");
 
 	if (input != NULL){
 		while (1){	//recorriendo el archivo de input linea a linea.
@@ -98,7 +132,8 @@ void Mostrar_por_linea(char *string){
 			archivo = fopen(filename,"r");
 
 			if (archivo != NULL){
-				for (int i = 0;i < linea;i++){ 	//recorriendo el archivo.
+				int i;
+				for (i = 0;i < linea;i++){ 	//recorriendo el archivo.
 					datos = linea_archivo(archivo);
 					if (i == linea-1){	//linea buscada.
 						printf("%s: %s\n",filename,datos);
@@ -124,11 +159,15 @@ void Mostrar_por_linea(char *string){
 	}
 	else printf("%s","Archivo de input no encontrado\n");
 	fclose(input);
+	free(nombre);
 }
 
 void Crear_archivo(char *string){//leer archivo de input y crear un archivo por cada linea.
 	FILE *input,*archivo;
-	input = leer_archivo(string);
+	char *nombre;
+
+	nombre = nombre_archivo(string);
+	input = fopen(nombre,"r");
 
 	if (input != NULL){
 		while (1){
@@ -145,11 +184,15 @@ void Crear_archivo(char *string){//leer archivo de input y crear un archivo por 
 
 	else printf("%s","Archivo de input no encontrado\n");
 	fclose(input);
+	free(nombre);
 }
 
 void Eliminar_archivo(char *string){//string es el input completo: <token> ... <token> <nombre archivo>
 	FILE *input;	//archivos en directorio db;
-	input = leer_archivo(string);
+	char *nombre;
+
+	nombre = nombre_archivo(string);
+	input = fopen(nombre,"r");
 
 	if (input != NULL){
 		while (1){
@@ -167,11 +210,15 @@ void Eliminar_archivo(char *string){//string es el input completo: <token> ... <
 
 	else printf("%s","Archivo de input no encontrado\n");
 	fclose(input);
+	free(nombre);
 }
 
-void Truncar_archivo(char *string){
+void Truncar_archivo(char *string){	
 	FILE *input,*archivo;
-	input = leer_archivo(string);
+	char *nombre;
+
+	nombre = nombre_archivo(string);
+	input = fopen(nombre,"r");
 
 	if (input != NULL){
 		while (1){
@@ -194,8 +241,5 @@ void Truncar_archivo(char *string){
 	}
 	else printf("%s","Archivo de input no encontrado\n");
 	fclose(input);
+	free(nombre);
 }
-
-
-
-

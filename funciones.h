@@ -5,13 +5,17 @@
 #include <string.h>
 #include <stdlib.h>
 
+int power(int base,int potencia);
+
 char **split(char *phrase, const size_t length, const char delimiter, size_t *n_tokens);
 
 char *linea_archivo(FILE *archivo);
 
-FILE *leer_archivo(char *string);
+char *nombre_archivo(char *string);
 
 int string_to_int(char *string);
+
+void Terminar_programa(char *string);
 
 void Mostrar_por_linea(char *string);
 
