@@ -195,3 +195,7 @@ void Truncar_archivo(char *string){
 	else printf("%s","Archivo de input no encontrado\n");
 	fclose(input);
 }
+
+
+
+

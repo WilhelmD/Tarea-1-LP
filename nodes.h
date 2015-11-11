@@ -1,19 +1,23 @@
 #ifndef NODES_H
 #define NODES_H
 
-struct l_node;
+#include <string.h>
 
-struct t_node
-{
-    struct l_node *children;
-    char *word;
-    void (*callback)(const char *);
+
+typedef struct l_node ListaNodo;
+typedef struct t_node ArbolNodo;
+
+
+struct t_node {	
+	ListaNodo *children;
+	char *word;
+	void (*callback)(const char *);
 };
 
-struct l_node
-{
-    struct t_node *data;
-    struct l_node *next;
+struct l_node{
+	ArbolNodo *data;
+	ListaNodo *siguiente;	
 };
+
 
 #endif // NODES_H

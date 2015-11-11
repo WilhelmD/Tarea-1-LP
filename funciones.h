@@ -21,4 +21,5 @@ void Eliminar_archivo(char *string);
 
 void Truncar_archivo(char *string);
 
+
 #endif

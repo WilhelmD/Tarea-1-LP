@@ -19,12 +19,19 @@ int main(){
 	for(int i=0; i<n_comandos; i++){
 		printf(">>");
 		getline(&string, &largo, stdin);
-		printf("%s",string);
+		//printf("%s",string);
 		a=split(string,largo,delimitador,&n_palabras);
-		printf("%c",a[0][0]);	
-	
+		for(int i=0;i<n_palabras;i++){
+			for(int j=0;j<n_palabras;j++){
+				printf("%c",a[i][j]);
+			}
+		}
+
+
 
 	}
+
+
 	
 
 	
