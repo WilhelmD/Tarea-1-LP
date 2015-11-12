@@ -19,7 +19,8 @@ struct l_node{
 	ListaNodo *siguiente;
 };
 
-void insertar_nodo(ArbolNodo arbol, char **palabras, size_t largo_array);
-void insertar_lista(ListaNodo *ptrCabecera,char *palabra);
+void listaInsertarPrimero(ListaNodo **ptrCabecera, char *string ,ArbolNodo *ptrArbol);
+void insertar_nodo(ArbolNodo *ptrarbol, char **palabras, size_t largo_array);
+
 
 #endif // NODES_H
