@@ -14,3 +14,5 @@ nodes.o: nodes.c
 
 clean:
 	rm *.o *~ main
+
+
