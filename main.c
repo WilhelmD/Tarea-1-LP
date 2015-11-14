@@ -4,9 +4,11 @@
 
 int main(){
 	int n_comandos;
+	ArbolNodo *ptrarbol=NULL;
+	ListaNodo *ptrCabecera=NULL;
 	char **a;
 	printf("");
-	
+
 	scanf("%d",&n_comandos);
 	getchar();
 
@@ -15,26 +17,20 @@ int main(){
 	size_t largo;
 	ssize_t lenstr = 0;
 	size_t n_palabras;
-	
+
 	for(int i=0; i<n_comandos; i++){
 		printf(">>");
 		getline(&string, &largo, stdin);
 		//printf("%s",string);
 		a=split(string,largo,delimitador,&n_palabras);
-		//for(int i=0;i<n_palabras;i++){
-		//	for(int j=0;j<n_palabras;j++){
-		//		printf("%c",a[i][j]);
-		//	}
-		//}
+		crear_arbol(&ptrCabecera,&ptrarbol,a,n_palabras);
+		insertar_nodo(&ptrarbol,a,n_palabras);
 
-
-
-	}
-
-
-	
-
-	
-	return 0;
 }
 
+
+
+
+
+	return 0;
+}
