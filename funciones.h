@@ -17,6 +17,12 @@ int string_to_int(char *string);
 
 void Terminar_programa(char *string);
 
+void Insertar(char *string);
+
+void Eliminar_por_linea(char *string);
+
+void Eliminar_por_coincidencia(char *string);
+
 void Mostrar_por_linea(char *string);
 
 void Crear_archivo(char *string);
