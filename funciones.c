@@ -46,16 +46,15 @@ char *linea_archivo(FILE *archivo){ //entrega un string con la linea de un archi
 	return linea;
 }
 
-char *nombre_archivo(char *string){ //lee el archivo con nombre en el ultimo token
+char *nombre_archivo(char *string){ //entrega el ultimo token (generalmente el nombre del archivo)
 	int i,largo_nombre;	
 	size_t valor,*n,largo;
-	char *filename;
-	char **tokens;
+	char **tokens,*filename;
 
 	valor = 0;
 	n = &valor;
 	largo = strlen(string);
-	tokens = split(string,largo,' ',n);
+	tokens = split(string,largo,' ',n);		//LIBERAR ESTO Y PROBAR DE NUEVO.
 
 	largo = strlen(tokens[(int) *n -1]);
 	largo_nombre = (int) largo;
@@ -109,6 +108,40 @@ void Terminar_programa(char *string){ //leer archivo, imprimir texto.
 	exit(0);
 }
 
+void Insertar(char *string){
+	//Abrir archivo para leer, escribir cada linea en otro archivo, insertar la linea correspondiente.
+	//Luego terminar de escribir las siguientes lineas en el archivo de escritura.
+
+	int linea;
+	char *nombre;
+	FILE *input,*archivo;
+
+	nombre = nombre_archivo(string);
+	input = fopen(nombre,"r");
+
+	if (input != NULL){
+		while (1){
+			char **palabras,*datos,*filename,*file_line = linea_archivo(input);//palabras = archivo linea dato 1... dato n
+			size_t *n,valor;	//datos = c/linea de c/archivo especificado en input, filename = palabras[0], file_line = cada linea del archivo input.
+			valor = 0;
+			n = &valor;
+
+			if (feof(input)) break;
+
+			palabras = split(file_line,strlen(file_line),' ',n);
+			filename = palabras[0];
+			linea = string_to_int(palabras[1]);
+			archivo = fopen(filename,"r");// archivo en el cual se debe insertar una linea.
+		}
+
+	}
+
+}
+
+void Eliminar_por_linea(char *string){}
+
+void Eliminar_por_coincidencia(char *string){}
+
 void Mostrar_por_linea(char *string){//caso en que linea no existe.
 	int linea;
 	char *nombre;
@@ -119,16 +152,16 @@ void Mostrar_por_linea(char *string){//caso en que linea no existe.
 
 	if (input != NULL){
 		while (1){	//recorriendo el archivo de input linea a linea.
-			char **arreglo,*datos,*filename,*file_line = linea_archivo(input);
+			char **palabras,*datos,*filename,*file_line = linea_archivo(input);
 			size_t *n,valor;
 			valor = 0;
 			n = &valor;
 
 			if (feof(input)) break;
 
-			arreglo = split(file_line,strlen(file_line),' ',n); //separar nombre del archivo de la linea que se busca.
-			filename = arreglo[0];
-			linea = string_to_int(arreglo[1]);
+			palabras = split(file_line,strlen(file_line),' ',n); //separar nombre del archivo de la linea que se busca.
+			filename = palabras[0];
+			linea = string_to_int(palabras[1]);
 			archivo = fopen(filename,"r");
 
 			if (archivo != NULL){
@@ -153,7 +186,7 @@ void Mostrar_por_linea(char *string){//caso en que linea no existe.
 				printf("Archivo '%s' no encontrado\n",filename);
 				fclose(archivo);
 			}
-			free(arreglo);
+			free(palabras);
 			free(file_line);
 		}
 	}
