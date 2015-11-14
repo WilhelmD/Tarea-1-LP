@@ -8,17 +8,18 @@ void listaInsertarPrimero(ListaNodo **ptrCabecera, char *string ,ArbolNodo *ptrA
 	puts("1");
 	ptrNuevo = malloc(sizeof(ListaNodo));
 	puts("2");
+
 	ptrNuevo->data = ptrArbol;
 	puts("3");
 	ptrNuevo->siguiente = *ptrCabecera;
 	puts("4");
 	*ptrCabecera = ptrNuevo;
 	puts("5");
-	ptrArbol->word = malloc(sizeof(ArbolNodo));
+	ptrArbol->word = malloc(sizeof(char) * (strlen(string) + 1));
 	puts("6");
 	strcpy(ptrArbol->word,string);
 	puts("7");
-}
+}//sirve ctm!
 
 void listaInsertar(ListaNodo *ptrPrevio, char *string , ArbolNodo *ptrArbol){
 	ListaNodo *ptrNuevo;
@@ -42,18 +43,16 @@ void listaInsertar(ListaNodo *ptrPrevio, char *string , ArbolNodo *ptrArbol){
 
 void insertar_nodo(ArbolNodo *ptrarbol, char **palabras, size_t largo_array){
 	int n_callback;
-	ListaNodo **ptrCabecera = NULL;
+	ListaNodo *ptrCabecera = NULL;
 	for(int i=0;i<largo_array;i++){
 		if(i==0) n_callback=string_to_int(palabras[0]);
 		else if(i==1){
-		    listaInsertarPrimero(ptrCabecera,palabras[1],ptrarbol);
+		    listaInsertarPrimero(&ptrCabecera,palabras[1],ptrarbol);
 
 			puts(ptrarbol->word);
 		}
 		else{
  			puts(ptrarbol->word);
-
 		}
-
 	}
 	}
