@@ -24,7 +24,7 @@ int main(){
 		//printf("%s",string);
 		a=split(string,largo,delimitador,&n_palabras);
 		crear_arbol(&ptrCabecera,&ptrarbol,a,n_palabras);
-		insertar_nodo(&ptrarbol,a,n_palabras);
+		insertar_nodo(&ptrCabecera,&ptrarbol,a,n_palabras);
 
 }
 
