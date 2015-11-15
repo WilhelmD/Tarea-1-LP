@@ -97,8 +97,10 @@ void insertar_nodo(ListaNodo **ptrCabecera, ArbolNodo **ptrarbol, char **palabra
 				//*ptrArbol=ptrAuxArbol;
 				ptrAuxLista->data = ptrAuxArbol;
 				ptrAuxLista->siguiente = NULL;
-				ptrarbol->children=ptrAuxLista; //linea ctm!
+				(*ptrarbol)->children=ptrAuxLista;
+				//puts("ahora es cuando!");
 				insertar_nodo(&ptrAuxArbol->children, &ptrAuxLista->data,palabras,largo_array);
+				puts("Sobrevimos");
 			}
 			//listaInsertarPrimero(&ptrAuxLista,&ptrAuxArbol,palabras[i],palabras,i);
 			/*if(ptrAuxLista->data->word == palabras[i]) {
