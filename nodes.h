@@ -20,7 +20,7 @@ struct l_node{
 };
 
 void listaInsertarPrimero(ListaNodo **ptrCabecera, ArbolNodo **ptrArbol, char *string, char **palabras,int i );
-void insertar_nodo(ListaNodo **ptrCabecera, ArbolNodo **ptrarbol, char **palabras, size_t largo_array);
+void insertar_nodo(ListaNodo **ptrCabecera, ArbolNodo **ptrarbol, char **palabras, size_t largo_array, int contador);
 
 
 
