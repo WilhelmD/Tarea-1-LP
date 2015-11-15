@@ -38,7 +38,7 @@ char *linea_archivo(FILE *archivo){ //entrega un string con la linea de un archi
 		c = fgetc(archivo);
 		if (c == '\n' || c == EOF) break;
 		else{
-			linea = (char *) realloc(linea,sizeof(char) * i); //memoria para un caracter mas.
+			linea = realloc(linea,sizeof(char) * i); //memoria para un caracter mas.
 			linea[i-1] = c;
 			i++;
 		}
@@ -109,20 +109,24 @@ void Terminar_programa(char *string){ //leer archivo, imprimir texto.
 }
 
 void Insertar(char *string){
-	//Abrir archivo para leer, escribir cada linea en otro archivo, insertar la linea correspondiente.
-	//Luego terminar de escribir las siguientes lineas en el archivo de escritura.
+	//Abrir archivo para leer, abrir tmpfile y escribir todas las lineas en el
+	//Insertar la linea en la posicion correspondiente en tmpfile, y seguir escribiendo hasta el final del 1er archivo.
+	//Al terminar de escribir rewind(tmpfile), reabrir el archivo leido en "w" y escribir todo en el.
 
 	int linea;
 	char *nombre;
 	FILE *input,*archivo;
 
+
 	nombre = nombre_archivo(string);
 	input = fopen(nombre,"r");
 
 	if (input != NULL){
-		while (1){
-			char **palabras,*datos,*filename,*file_line = linea_archivo(input);//palabras = archivo linea dato 1... dato n
+		while (1){//recorre las lineas del archivo de input.
+			char **palabras,*filename,*file_line;//palabras = archivo linea dato 1... dato n
 			size_t *n,valor;	//datos = c/linea de c/archivo especificado en input, filename = palabras[0], file_line = cada linea del archivo input.
+
+			file_line = linea_archivo(input);
 			valor = 0;
 			n = &valor;
 
@@ -132,6 +136,85 @@ void Insertar(char *string){
 			filename = palabras[0];
 			linea = string_to_int(palabras[1]);
 			archivo = fopen(filename,"r");// archivo en el cual se debe insertar una linea.
+
+			if (archivo == NULL){
+				printf("Archivo %s no encontrado.\n",filename);
+				continue;
+			}
+			else{
+				//recorrer archivo, escribir todas sus lineas en temp.txt, al llegar a la dichosa linea escribirla en temp.txt y seguir hasta el final.
+				FILE *temp = fopen("temp.txt", "w");
+				char *datos;
+				int i,insertada = 0,cont = 0;
+
+				datos = linea_archivo(archivo);	
+
+				printf("palabras: \n\n");
+				for (i = 0;i< *n; i++) printf("%s ",palabras[i]);
+
+				printf("\n\ndatos:\n\n");
+				while (1){///////////////////////
+					printf("%s\n",datos);
+					free(datos);
+					if (feof(archivo)) break;
+					datos = linea_archivo(archivo);
+				}
+				printf("\n");
+
+				rewind(archivo);
+				datos = linea_archivo(archivo);
+
+				while (1){
+
+					if (cont == linea){
+						for (i = 2; i < *n; i++){
+							fprintf(temp, "%s", palabras[i]);
+
+							if (i == *n -1) fprintf(temp, "\n");
+							else fprintf(temp, " ");
+
+						}
+
+						insertada = 1;
+					}
+
+					fprintf(temp,"%s\n",datos);
+					free(datos);
+
+					datos = linea_archivo(archivo);
+					cont++;
+
+					if ( feof(archivo) ){
+						if (linea < 0){
+							for (i = 2; i < *n; i++){
+								fprintf(temp, "%s", palabras[i]);
+
+								if (i == *n -1) fprintf(temp, "\n");
+								else fprintf(temp, " ");
+
+							}
+
+							insertada = 1;
+						}
+
+						if (insertada == 0){
+							printf("Linea %d no existe en %s\n",linea,filename);
+							fclose(temp);
+							remove("temp.txt");
+						}
+						break;
+					}
+				}
+
+				if (insertada == 1) fclose(temp);
+				fclose(archivo);
+				remove(filename);
+				rename("temp.txt",filename);
+			}
+
+			free(file_line);
+			free(palabras);
+			free(filename);
 		}
 
 	}
