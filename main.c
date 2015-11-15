@@ -24,11 +24,8 @@ int main(){
 		//printf("%s",string);
 		a=split(string,largo,delimitador,&n_palabras);
 		insertar_nodo(&ptrCabecera,&raiz,a,n_palabras,contador);
-		puts("terminamos el primero comando perro!");
 		contador=0;
-
 }
-
 
 
 
