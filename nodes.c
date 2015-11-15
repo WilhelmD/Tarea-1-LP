@@ -3,56 +3,123 @@
 #include "nodes.h"
 #include "funciones.h"
 
-void listaInsertarPrimero(ListaNodo **ptrCabecera, char *string ,ArbolNodo *ptrArbol) {
-	ListaNodo *ptrNuevo;
-	puts("1");
-	ptrNuevo = malloc(sizeof(ListaNodo));
-	puts("2");
+void listaInsertarPrimero(ListaNodo **ptrCabecera, ArbolNodo **ptrArbol, char *string, char **palabras,int i ) {
+	ListaNodo *ptrAuxLista=NULL;
+	ArbolNodo *ptrAuxArbol=NULL;
+	ptrAuxLista = malloc(sizeof(ListaNodo));
+	ptrAuxArbol = malloc(sizeof(ArbolNodo));
+	ptrAuxArbol->word=malloc(sizeof(char) * (strlen(string) + 1));
+	strcpy(ptrAuxArbol->word,string);
+	ptrAuxArbol->children=NULL;
+	*ptrArbol=ptrAuxArbol;
+	ptrAuxLista->data = *ptrArbol;
+	ptrAuxLista->siguiente = NULL; //podria cambiarse =ptrCabecera
+	*ptrCabecera = ptrAuxLista;
+	ptrAuxArbol=*ptrArbol;
+	puts("Numerito:");
+	ptrAuxLista=*ptrCabecera;
 
-	ptrNuevo->data = ptrArbol;
-	puts("3");
-	ptrNuevo->siguiente = *ptrCabecera;
-	puts("4");
-	*ptrCabecera = ptrNuevo;
-	puts("5");
-	ptrArbol->word = malloc(sizeof(char) * (strlen(string) + 1));
-	puts("6");
-	strcpy(ptrArbol->word,string);
-	puts("7");
-}//sirve ctm!
+	printf("%d",i);
+	i+=1;
+	if(ptrAuxLista->data->word == palabras[i] && ptrAuxLista->siguiente == NULL) {
+		puts("Dime si entraste wn");
+	};
+	listaInsertarPrimero(&ptrAuxArbol->children,&ptrAuxLista->data,palabras[i],palabras,i);
 
-void listaInsertar(ListaNodo *ptrPrevio, char *string , ArbolNodo *ptrArbol){
+	//*ptrArbol->word = malloc(sizeof(char) * (strlen(string) + 1));
+	//strcpy(*ptrArbol->word,string);
+}
+
+int buscar_arbol(ArbolNodo *ptrArbol, ListaNodo *ptrCabecera, char **palabras, size_t largo_array){
+	for(int i=0;i<largo_array;i++){
+		for(; ptrCabecera->data->word != palabras[i] && ptrCabecera->siguiente != NULL; ptrCabecera = ptrCabecera->siguiente){
+			puts("ojala wn !");
+			if(strcmp(ptrCabecera->data->word,palabras[i])) return 1;
+		}
+	}
+	return 0;
+}
+
+
+
+
+/*void listaInsertar(ListaNodo *ptrPrevio, char *string , ArbolNodo *ptrArbol){
 	ListaNodo *ptrNuevo;
 	printf("hola ctm!");
 	ptrNuevo = malloc(sizeof(ListaNodo));
 	ptrNuevo->data = ptrArbol;
 	ptrNuevo->siguiente = ptrPrevio->siguiente;
 	ptrPrevio->siguiente = ptrNuevo;
-}
+}*/
 
-/*ListaNodo* listaBuscar(ListaNodo *ptrCabecera,char **palabras ,size_t largo_array){
-	ListaNodo *ptr;
-	size_t contador;
-	for (contador;contador<largo_array;contador++){
-		for (ptr = ptrCabecera; ptr != NULL; ptr = ptr->siguiente)
-			if (palabras[contador] == ptr->data) return ptr;
+/*int recorrer_lista(ListaNodo **ptrCabecera,char *string,ArbolNodo *ptrarbol ){
+	for(; *ptrCabecera->data->word != string && *ptrCabecera->siguiente != NULL; *ptrCabecera = *ptrCabecera->siguiente){
+		if(strcmp(*ptrCabecera->data->word,string)){
+			puts("wtf!?");
+			listaInsertarPrimero(&ptrCabecera->data->children, string,ptrarbol);
+		}
+		else{
+			puts("Trabja mierda");
+		}
 	}
-		return NULL;
+
 }*/
 
 
-void insertar_nodo(ArbolNodo *ptrarbol, char **palabras, size_t largo_array){
-	int n_callback;
-	ListaNodo *ptrCabecera = NULL;
-	for(int i=0;i<largo_array;i++){
-		if(i==0) n_callback=string_to_int(palabras[0]);
-		else if(i==1){
-		    listaInsertarPrimero(&ptrCabecera,palabras[1],ptrarbol);
+void insertar_nodo(ListaNodo **ptrCabecera, ArbolNodo **ptrarbol, char **palabras, size_t largo_array){
+	int n_callback,contador;
 
-			puts(ptrarbol->word);
+	for(int i=0;i<largo_array;i++){
+		if(*ptrarbol==NULL){
+			ListaNodo *ptrAuxLista=NULL;
+			ArbolNodo *ptrAuxArbol=NULL;
+			ptrAuxArbol = malloc(sizeof(ArbolNodo));
+			ptrAuxLista = malloc(sizeof(ListaNodo));
+			ptrAuxArbol->children=NULL;
+			ptrAuxArbol->word="ROOT";
+			ptrAuxLista->data=ptrAuxArbol;
+			ptrAuxLista->siguiente=NULL;
+			*ptrarbol=ptrAuxArbol;
+			*ptrCabecera=ptrAuxLista;
 		}
 		else{
- 			puts(ptrarbol->word);
+			n_callback=string_to_int(palabras[0]);
+			//ListaNodo *ptrAuxLista=*ptrCabecera;
+			ArbolNodo *ptrAuxArbol=*ptrarbol;
+			if(ptrAuxArbol->children==NULL ){
+				ListaNodo *ptrAuxLista=NULL;
+				ArbolNodo *ptrAuxArbol=NULL;
+				ptrAuxLista = malloc(sizeof(ListaNodo));
+				ptrAuxArbol = malloc(sizeof(ArbolNodo));
+				ptrAuxArbol->word=malloc(sizeof(char) * (strlen(palabras[i]) + 1));
+				strcpy(ptrAuxArbol->word,palabras[i]);
+				ptrAuxArbol->children=NULL;
+				//*ptrArbol=ptrAuxArbol;
+				ptrAuxLista->data = ptrAuxArbol;
+				ptrAuxLista->siguiente = NULL;
+				(*ptrarbol)->children=ptrAuxLista;
+				//puts("ahora es cuando!");
+				insertar_nodo(&ptrAuxArbol->children, &ptrAuxLista->data,palabras,largo_array);
+				puts("Sobrevimos");
+			}
+			//listaInsertarPrimero(&ptrAuxLista,&ptrAuxArbol,palabras[i],palabras,i);
+			/*if(ptrAuxLista->data->word == palabras[i]) {
+				puts("será la recusrion?");
+				insertar_nodo(&ptrAuxLista,&ptrAuxArbol,palabras,largo_array);
+			}
+			else{
+				puts("EL else?");
+				ptrAuxLista =ptrAuxLista->siguiente;
+				puts(ptrAuxLista->data->word);
+			}*/
+			/*for(; ptrAuxLista->data->word != palabras[i] && ptrAuxLista->siguiente != NULL; ptrAuxLista = ptrAuxLista->siguiente){
+				puts("Sera el if?");
+				if(strcmp(ptrAuxLista->data->word,palabras[i])) {
+					puts("INSERTA CTM!");
+					insertar_nodo(&ptrAuxLista,&ptrAuxArbol,palabras,largo_array);
+
+				}
+			}*/
 		}
 	}
-	}
+}
