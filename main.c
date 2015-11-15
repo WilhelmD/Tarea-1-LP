@@ -4,7 +4,7 @@
 
 int main(){
 	int n_comandos;
-	ArbolNodo *ptrarbol=NULL;
+	ArbolNodo *raiz=NULL;
 	ListaNodo *ptrCabecera=NULL;
 	char **a;
 	printf("");
@@ -23,8 +23,8 @@ int main(){
 		getline(&string, &largo, stdin);
 		//printf("%s",string);
 		a=split(string,largo,delimitador,&n_palabras);
-		crear_arbol(&ptrCabecera,&ptrarbol,a,n_palabras);
-		insertar_nodo(&ptrCabecera,&ptrarbol,a,n_palabras);
+		insertar_nodo(&ptrCabecera,&raiz,a,n_palabras);
+		//puts("veremos que ondi");
 
 }
 
