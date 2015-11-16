@@ -3,7 +3,8 @@
 #define MAX_BUFFER 1000
 
 int main(){
-	int n_comandos;
+	int n_comandos,contador=0;
+	ssize_t read;
 	ArbolNodo *raiz=NULL;
 	ListaNodo *ptrCabecera=NULL;
 	char **a;
@@ -23,13 +24,9 @@ int main(){
 		getline(&string, &largo, stdin);
 		//printf("%s",string);
 		a=split(string,largo,delimitador,&n_palabras);
-		insertar_nodo(&ptrCabecera,&raiz,a,n_palabras);
-		//puts("veremos que ondi");
-
+		insertar_nodo(&ptrCabecera,&raiz,a,n_palabras,contador);
+		contador=0;
 }
-
-
-
 
 
 	return 0;
