@@ -4,6 +4,7 @@
 
 int main(){
 	int n_comandos,contador=0;
+	ssize_t read;
 	ArbolNodo *raiz=NULL;
 	ListaNodo *ptrCabecera=NULL;
 	char **a;
@@ -26,8 +27,6 @@ int main(){
 		insertar_nodo(&ptrCabecera,&raiz,a,n_palabras,contador);
 		contador=0;
 }
-
-
 
 
 	return 0;
