@@ -117,11 +117,11 @@ void Insertar(char *string){
 	input = fopen(nombre,"r");
 
 	if (input != NULL){
-		while (1){//recorre las lineas del archivo de input.
-			char **palabras,*filename,*file_line;//palabras = archivo linea dato 1... dato n
-			size_t *n,valor;	//datos = c/linea de c/archivo especificado en input, filename = palabras[0], file_line = cada linea del archivo input.
+		while (1){
+			char **palabras,*filename,*file_line;
+			size_t *n,valor;
 
-			file_line = malloc( sizeof(char) * 128);//designar tamaño maximo para las lineas del archivo de input.
+			file_line = malloc( sizeof(char) * 128);
 			file_line = fgets(file_line, sizeof(char) * 128, input);
 			valor = 0;
 			n = &valor;
@@ -131,19 +131,18 @@ void Insertar(char *string){
 			palabras = split(file_line,strlen(file_line),' ',n);
 			filename = palabras[0];
 			linea = string_to_int(palabras[1]);
-			archivo = fopen(filename,"r");// archivo en el cual se debe insertar una linea.
+			archivo = fopen(filename,"r");
 
 			if (archivo == NULL){
 				printf("Archivo %s no encontrado.\n",filename);
 				continue;
 			}
 			else{
-				//recorrer archivo, escribir todas sus lineas en aux.txt, al llegar a la dichosa linea escribirla en aux.txt y seguir hasta el final.
 				FILE *temp = fopen("aux.txt", "w");
 				char *datos;
 				int i,insertada = 0,cont = 0;
 
-				datos = malloc( sizeof(char) * 128);//designar tamaño maximo para lineas del archivo a insertar.
+				datos = malloc( sizeof(char) * 128);
 				datos = fgets(datos, sizeof(char) * 128, archivo);
 
 				while (1){
@@ -160,9 +159,8 @@ void Insertar(char *string){
 					}
 
 					fprintf(temp,"%s",datos);
-					//free(datos);
 
-					datos = fgets(datos, sizeof(char) * 128, archivo);//linea_archivo(archivo);
+					datos = fgets(datos, sizeof(char) * 128, archivo);
 					cont++;
 
 					if ( feof(archivo) ){
@@ -212,13 +210,13 @@ void Eliminar_por_linea(char *string){
 	input = fopen(nombre,"r");
 
 	if (input != NULL){
-		while (1){//recorre las lineas del archivo de input.
-			char **palabras,*filename,*file_line,**aux;//palabras = archivo linea dato 1... dato n
-			size_t *n,valor;	//datos = c/linea de c/archivo especificado en input, filename = palabras[0], file_line = cada linea del archivo input.
+		while (1){
+			char **palabras,*filename,*file_line,**aux;
+			size_t *n,valor;
 			int i,largo;
 
-			file_line = malloc( sizeof(char) * 32);//designar tamaño maximo para las lineas del archivo de input.
-			file_line = fgets(file_line, sizeof(char) * 32, input);
+			file_line = malloc( sizeof(char) * 64);
+			file_line = fgets(file_line, sizeof(char) * 64, input);
 			valor = 0;
 			n = &valor;
 
@@ -230,7 +228,7 @@ void Eliminar_por_linea(char *string){
 			filename = palabras[0];
 			linea = string_to_int(aux[0]);
 			free(aux);
-			archivo = fopen(filename,"r");// archivo en el cual se debe insertar una linea.
+			archivo = fopen(filename,"r");
 
 			if (archivo == NULL){
 				printf("Archivo %s no encontrado.\n",filename);
@@ -286,12 +284,12 @@ void Eliminar_por_coincidencia(char *string){
 	input = fopen(nombre,"r");
 
 	if (input != NULL){
-		while (1){//recorre las lineas del archivo de input.
-			char **palabras,**aux,*filename,*file_line,*keyword;//palabras = archivo linea dato 1... dato n
-			size_t *n,valor;	//datos = c/linea de c/archivo especificado en input, filename = palabras[0], file_line = cada linea del archivo input.
+		while (1){
+			char **palabras,**aux,*filename,*file_line,*keyword;
+			size_t *n,valor;
 			int i,indice,largo;
 
-			file_line = malloc( sizeof(char) * 64);//designar tamaño maximo para las lineas del archivo de input.
+			file_line = malloc( sizeof(char) * 64);
 			file_line = fgets(file_line, sizeof(char) * 64, input);
 			valor = 0;
 			n = &valor;
@@ -304,7 +302,7 @@ void Eliminar_por_coincidencia(char *string){
 			filename = palabras[0];
 			keyword = aux[0];
 			indice = string_to_int(palabras[1]);
-			archivo = fopen(filename,"r");// archivo en el cual se debe insertar una linea.
+			archivo = fopen(filename,"r");
 
 			if (archivo == NULL){
 				printf("Archivo %s no encontrado.\n",filename);
@@ -312,7 +310,7 @@ void Eliminar_por_coincidencia(char *string){
 			}
 			else{
 				int eliminada;
-				char *datos;	//buscar si la keyword esta en la linea, eliminar si esta ahi.
+				char *datos;
 				FILE *temp;
 
 				temp = fopen("aux.txt","w");
