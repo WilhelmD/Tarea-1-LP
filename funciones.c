@@ -109,14 +109,9 @@ void Terminar_programa(char *string){ //leer archivo, imprimir texto.
 }
 
 void Insertar(char *string){
-	//Abrir archivo para leer, abrir tmpfile y escribir todas las lineas en el
-	//Insertar la linea en la posicion correspondiente en tmpfile, y seguir escribiendo hasta el final del 1er archivo.
-	//Al terminar de escribir rewind(tmpfile), reabrir el archivo leido en "w" y escribir todo en el.
-
 	int linea;
 	char *nombre;
 	FILE *input,*archivo;
-
 
 	nombre = nombre_archivo(string);
 	input = fopen(nombre,"r");
@@ -126,7 +121,8 @@ void Insertar(char *string){
 			char **palabras,*filename,*file_line;//palabras = archivo linea dato 1... dato n
 			size_t *n,valor;	//datos = c/linea de c/archivo especificado en input, filename = palabras[0], file_line = cada linea del archivo input.
 
-			file_line = linea_archivo(input);
+			file_line = malloc( sizeof(char) * 128);//designar tamaño maximo para las lineas del archivo de input.
+			file_line = fgets(file_line, sizeof(char) * 128, input);
 			valor = 0;
 			n = &valor;
 
@@ -142,55 +138,39 @@ void Insertar(char *string){
 				continue;
 			}
 			else{
-				//recorrer archivo, escribir todas sus lineas en temp.txt, al llegar a la dichosa linea escribirla en temp.txt y seguir hasta el final.
-				FILE *temp = fopen("temp.txt", "w");
+				//recorrer archivo, escribir todas sus lineas en aux.txt, al llegar a la dichosa linea escribirla en aux.txt y seguir hasta el final.
+				FILE *temp = fopen("aux.txt", "w");
 				char *datos;
 				int i,insertada = 0,cont = 0;
 
-				datos = linea_archivo(archivo);	
-
-				printf("palabras: \n\n");
-				for (i = 0;i< *n; i++) printf("%s ",palabras[i]);
-
-				printf("\n\ndatos:\n\n");
-				while (1){///////////////////////
-					printf("%s\n",datos);
-					free(datos);
-					if (feof(archivo)) break;
-					datos = linea_archivo(archivo);
-				}
-				printf("\n");
-
-				rewind(archivo);
-				datos = linea_archivo(archivo);
+				datos = malloc( sizeof(char) * 128);//designar tamaño maximo para lineas del archivo a insertar.
+				datos = fgets(datos, sizeof(char) * 128, archivo);
 
 				while (1){
 
 					if (cont == linea){
-						for (i = 2; i < *n; i++){
+						for (i = 2; i < valor; i++){
 							fprintf(temp, "%s", palabras[i]);
 
-							if (i == *n -1) fprintf(temp, "\n");
-							else fprintf(temp, " ");
+							if (i != valor -1) fprintf(temp,"%c", ' ');
 
 						}
 
 						insertada = 1;
 					}
 
-					fprintf(temp,"%s\n",datos);
-					free(datos);
+					fprintf(temp,"%s",datos);
+					//free(datos);
 
-					datos = linea_archivo(archivo);
+					datos = fgets(datos, sizeof(char) * 128, archivo);//linea_archivo(archivo);
 					cont++;
 
 					if ( feof(archivo) ){
 						if (linea < 0){
-							for (i = 2; i < *n; i++){
+							for (i = 2; i < valor; i++){
 								fprintf(temp, "%s", palabras[i]);
 
-								if (i == *n -1) fprintf(temp, "\n");
-								else fprintf(temp, " ");
+								if (i != valor -1) fprintf(temp,"%c", ' ');
 
 							}
 
@@ -200,16 +180,18 @@ void Insertar(char *string){
 						if (insertada == 0){
 							printf("Linea %d no existe en %s\n",linea,filename);
 							fclose(temp);
-							remove("temp.txt");
+							remove("aux.txt");
 						}
 						break;
 					}
 				}
 
-				if (insertada == 1) fclose(temp);
 				fclose(archivo);
-				remove(filename);
-				rename("temp.txt",filename);
+				if (insertada == 1){
+					fclose(temp);
+					remove(filename);
+					rename("aux.txt",filename);
+				}
 			}
 
 			free(file_line);
@@ -221,9 +203,169 @@ void Insertar(char *string){
 
 }
 
-void Eliminar_por_linea(char *string){}
+void Eliminar_por_linea(char *string){
+	int linea;
+	char *nombre;
+	FILE *input,*archivo;
 
-void Eliminar_por_coincidencia(char *string){}
+	nombre = nombre_archivo(string);
+	input = fopen(nombre,"r");
+
+	if (input != NULL){
+		while (1){//recorre las lineas del archivo de input.
+			char **palabras,*filename,*file_line,**aux;//palabras = archivo linea dato 1... dato n
+			size_t *n,valor;	//datos = c/linea de c/archivo especificado en input, filename = palabras[0], file_line = cada linea del archivo input.
+			int i,largo;
+
+			file_line = malloc( sizeof(char) * 32);//designar tamaño maximo para las lineas del archivo de input.
+			file_line = fgets(file_line, sizeof(char) * 32, input);
+			valor = 0;
+			n = &valor;
+
+			if (feof(input)) break;
+
+			palabras = split(file_line,strlen(file_line),' ',n);
+			aux = split(palabras[1],strlen(palabras[1]),'\n',n);
+			
+			filename = palabras[0];
+			linea = string_to_int(aux[0]);
+			free(aux);
+			archivo = fopen(filename,"r");// archivo en el cual se debe insertar una linea.
+
+			if (archivo == NULL){
+				printf("Archivo %s no encontrado.\n",filename);
+				continue;
+			}
+			else{
+				int cont,eliminada;
+				char *datos;
+				FILE *temp;
+
+				temp = fopen("aux.txt","w");
+				datos = malloc( sizeof(char) * 128 );
+				datos = fgets(datos, sizeof(char) * 128, archivo);
+				cont = 0;
+
+				while (1){
+
+					if (cont == linea){
+						datos = fgets(datos, sizeof(char) * 128, archivo);
+						eliminada = 1;
+					}
+					if (feof(archivo)){
+						if (eliminada != 1){
+							printf("linea %d no encontrada en %s\n",linea,filename);
+							eliminada = 0;
+						}
+						break;
+					}
+
+					fprintf(temp,"%s",datos);
+					datos = fgets(datos, sizeof(char) * 128, archivo);
+					cont++;
+				}
+
+				free(datos);
+				fclose(temp);
+				fclose(archivo);
+				if (eliminada == 1){
+					remove(filename);
+					rename("aux.txt",filename);
+				}
+
+			}
+		}
+	}
+}
+
+void Eliminar_por_coincidencia(char *string){
+	char *nombre;
+	FILE *input,*archivo;
+
+	nombre = nombre_archivo(string);
+	input = fopen(nombre,"r");
+
+	if (input != NULL){
+		while (1){//recorre las lineas del archivo de input.
+			char **palabras,**aux,*filename,*file_line,*keyword;//palabras = archivo linea dato 1... dato n
+			size_t *n,valor;	//datos = c/linea de c/archivo especificado en input, filename = palabras[0], file_line = cada linea del archivo input.
+			int i,indice,largo;
+
+			file_line = malloc( sizeof(char) * 64);//designar tamaño maximo para las lineas del archivo de input.
+			file_line = fgets(file_line, sizeof(char) * 64, input);
+			valor = 0;
+			n = &valor;
+
+			if (feof(input)) break;
+
+			palabras = split(file_line,strlen(file_line),' ',n);
+			aux = split(palabras[2],strlen(palabras[2]),'\n',n);
+			
+			filename = palabras[0];
+			keyword = aux[0];
+			indice = string_to_int(palabras[1]);
+			archivo = fopen(filename,"r");// archivo en el cual se debe insertar una linea.
+
+			if (archivo == NULL){
+				printf("Archivo %s no encontrado.\n",filename);
+				continue;
+			}
+			else{
+				int eliminada;
+				char *datos;	//buscar si la keyword esta en la linea, eliminar si esta ahi.
+				FILE *temp;
+
+				temp = fopen("aux.txt","w");
+				datos = malloc( sizeof(char) * 128 );
+				datos = fgets(datos, sizeof(char) * 128, archivo);
+
+				while (1){
+					char **tokens,**ultimo;
+					int i;
+					size_t *n,valor = 0;
+					n = &valor;
+
+					tokens = split(datos,strlen(datos),' ',n);
+					ultimo = split(tokens[valor-1],strlen(tokens[valor-1]),'\n',n);
+					if (!strcmp(keyword,tokens[indice])){
+						datos = fgets(datos, sizeof(char) * 128, archivo);
+						eliminada = 1;
+					}
+					if (indice = (int)valor -1){
+						if (!strcmp(keyword,ultimo[0])){
+							datos = fgets(datos, sizeof(char) * 128, archivo);
+							eliminada = 1;
+						}
+					}
+
+					free(ultimo);
+					free(tokens);
+
+					if (feof(archivo)){
+						if (eliminada != 1){
+							printf("keyword %s no encontrado en %s\n",keyword,filename);
+							eliminada = 0;
+						}
+						break;
+					}
+					fprintf(temp,"%s",datos);
+					datos = fgets(datos, sizeof(char) * 128, archivo);
+				}
+
+				free(datos);
+				fclose(temp);
+				fclose(archivo);
+				if (eliminada == 1){
+					remove(filename);
+					rename("aux.txt",filename);
+				}
+				if (eliminada == 0) remove("aux.txt");
+
+			}
+		}
+	}
+
+}
 
 void Mostrar_por_linea(char *string){//caso en que linea no existe.
 	int linea;
